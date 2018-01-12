@@ -6,7 +6,6 @@ echo I am changing zsh theme...
 sed -i -e 's/^ZSH_THEME=.*/ZSH_THEME="agnoster"/' ~/.zshrc
 SCRIPT
 
-
 $fonts = <<SCRIPT
 git clone https://github.com/powerline/fonts.git --depth=1
 cd fonts
@@ -14,7 +13,6 @@ cd fonts
 cd ..
 rm -rf fonts
 SCRIPT
-
 
 
 Vagrant.configure("2") do |config|
@@ -59,10 +57,13 @@ Vagrant.configure("2") do |config|
   ############################################################
   # Developer Tools Install section
   ############################################################
-  # sudo yum -y -q update &&\
-  # sudo yum groups mark install "Development Tools" &&\
-  # sudo yum groups mark convert "Development Tools"&&\
-  # sudo yum groupinstall "Development Tools"
+  config.vm.provision :shell, inline: "yum -y -q update"
+  config.vm.provision :shell, 
+    inline: "yum groups mark install 'Development Tools'"
+  # config.vm.provision :shell, 
+    # inline: "yum groups mark convert 'Development Tools'"
+  config.vm.provision :shell, 
+    inline: "yum groupinstall 'Development Tools'"
   ############################################################
 
 
@@ -70,8 +71,10 @@ Vagrant.configure("2") do |config|
   # Python Tools Install section
   ############################################################
   # sudo yum --enablerepo=extras install epel-release -y -q
-  # sudo yum install python-pip python-wheel python-devel -y -q
-  # sudo pip install -U -q pip
+  config.vm.provision :shell, 
+    inline "yum install python-pip python-wheel python-devel -y -q"
+  config.vm.provision :shell, 
+    inline, "pip install -U -q pip"
   ############################################################
   
   
@@ -81,13 +84,11 @@ Vagrant.configure("2") do |config|
   # sudo yum install -y -q yum-utils device-mapper-persiste nt-data lvm2
   # sudo yum-config-manager --add-repo https://download.doc ker.com/linux/centos/docker-ce.repo 
   # sudo yum-config-manager --enable docker-ce-edge
-  # sudo yum-config-manager --enable docker-ce-tes
+  # sudo yum-config-manager --enable docker-ce-test
   # sudo yum -y -q install docker-ce
   # sudo systemctl start docker
   # sudo systemctl enable docker
   # sudo su
   # usermod -aG docker vagrant
   ############################################################
-
-
 end
